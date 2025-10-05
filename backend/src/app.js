@@ -10,32 +10,33 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// --- CORS CONFIGURATION UPDATE ---
+// --- FINAL CORS CONFIGURATION ---
+// This is the live URL of your frontend application on Vercel.
+const vercelFrontendUrl = "https://gets-readiness-checker.vercel.app";
+
+// We create a list of origins that are allowed to make requests to this API.
 const allowedOrigins = [
-  "http://localhost:5173", // Your local dev frontend
-  // Add your future Vercel URL here once you have it.
-  // For now, we can use a placeholder or add it later.
-  // It's better to add it *after* deploying the frontend.
+  "http://localhost:5173", // For your local development
+  vercelFrontendUrl, // For your live application
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg =
-        "The CORS policy for this site does not allow access from the specified Origin.";
-      return callback(new Error(msg), false);
+    // The 'origin' is the URL of the site making the request (e.g., your Vercel URL).
+    // This function checks if the incoming origin is in our allowed list.
+    if (!origin || allowedOrigins.includes(origin)) {
+      // If it's in the list (or if there's no origin, like a server-to-server request), allow it.
+      callback(null, true);
+    } else {
+      // If the origin is not in our list, reject the request.
+      callback(new Error("This origin is not allowed by CORS policy."));
     }
-    return callback(null, true);
   },
 };
 
-// In production, we'll want a more secure, specific list.
-// For now, let's make it more open and then lock it down.
-// A simpler setup for now:
-app.use(cors()); // This is open for now. We will secure it after deploying the frontend.
-// --- END CORS UPDATE ---
+// Use the configured CORS options.
+app.use(cors(corsOptions));
+// --- END CORS CONFIGURATION ---
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
