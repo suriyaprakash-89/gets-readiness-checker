@@ -1,0 +1,5 @@
+invoiceId,issue_date,seller_name,seller_tax_id,buyer_name,buyer_tax_id,currency,total,tax_amount,line_description,line_qty,line_unit_price,line_total
+INV-101,2023/10/28,Vendor Co,VAT111,Customer Co,VAT222,USD,150,25,Item X,2,50,125
+INV-102,29-10-2023,Vendor Co,,Customer Co,VAT222,AUD,55,5,Item Y,1,50,50
+INV-103,2023-10-30,Vendor Co,VAT111,Customer Co,VAT222,USD,100,15,Item Z,3,30,90
+INV-104,2023-10-31,Vendor Co,VAT111,Customer Co,,USD,200,0,Service P,1,200,200

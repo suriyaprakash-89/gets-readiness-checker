@@ -1,0 +1,40 @@
+[
+  {
+    "invoiceId": "INV-001",
+    "issueDate": "2023-10-26",
+    "sellerName": "Supplier Inc.",
+    "sellerTaxNumber": "VAT123456789",
+    "buyerName": "Buyer Corp.",
+    "buyerTaxNumber": "VAT987654321",
+    "currency": "USD",
+    "invoiceTotal": 120.0,
+    "taxTotal": 20.0,
+    "lineItems": [
+      {
+        "description": "Product A",
+        "quantity": 2,
+        "unitPrice": 50.0,
+        "lineTotal": 100.0
+      }
+    ]
+  },
+  {
+    "invoiceId": "INV-002",
+    "issueDate": "2023-10-27",
+    "sellerName": "Supplier Inc.",
+    "sellerTaxNumber": "VAT123456789",
+    "buyerName": "Client LLC",
+    "buyerTaxNumber": "VAT555444333",
+    "currency": "EUR",
+    "invoiceTotal": 240.0,
+    "taxTotal": 40.0,
+    "lineItems": [
+      {
+        "description": "Service B",
+        "quantity": 4,
+        "unitPrice": 50.0,
+        "lineTotal": 200.0
+      }
+    ]
+  }
+]

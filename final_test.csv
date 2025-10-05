@@ -1,0 +1,4 @@
+inv_no,issued_on,curr,sellerName,sellerTax,buyerName,buyerTax,totalNet,vat,grandTotal,lineQty,linePrice,lineTotal
+INV-4001,2025-01-20,GBP,,Omega LLC,900900900,500,25,525,5,100,500
+INV-4002,21/01/2025,SAR,Sigma LLC,555666777,Zeta Co,,200,10,210,2,100,199
+INV-4003,2025-01-22,AED,Nu LLC,999888777,Mu Co,777666555,300,15,316,3,100,300
