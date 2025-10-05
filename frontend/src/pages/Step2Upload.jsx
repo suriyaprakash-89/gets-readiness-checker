@@ -17,8 +17,6 @@ const Step2Upload = () => {
   } = useContext(AppContext);
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
-
-  // ... (No changes to handler functions)
   const handleFileChange = (e) => {
     setError("");
     setUploadData(null);

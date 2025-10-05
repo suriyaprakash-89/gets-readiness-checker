@@ -9,13 +9,11 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for an existing session
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);
     });
-
-    // Listen for changes in authentication state
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -30,8 +28,6 @@ export const AuthProvider = ({ children }) => {
     user: session?.user,
     signOut: () => supabase.auth.signOut(),
   };
-
-  // Show a loader while session is being determined
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

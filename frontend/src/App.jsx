@@ -1,6 +1,6 @@
 import React, { useState, createContext } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { Toaster } from "react-hot-toast"; // Import Toaster
+import { Toaster } from "react-hot-toast"; 
 import Step1Context from "./pages/Step1Context";
 import Step2Upload from "./pages/Step2Upload";
 import Step3Results from "./pages/Step3Results";
@@ -13,7 +13,6 @@ import RegisterPage from "./pages/RegisterPage";
 
 export const AppContext = createContext();
 
-// Main application layout that is protected
 function MainLayout() {
   const [contextData, setContextData] = useState({
     country: "US",
@@ -72,36 +71,30 @@ function MainLayout() {
     </AppContext.Provider>
   );
 }
-
-// Main App component with public and protected routes
 function App() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Add Toaster component here for app-wide notifications */}
       <Toaster
         position="top-right"
         toastOptions={{
           success: {
             style: {
-              background: "#F0FFF4", // green-50
-              color: "#2F855A", // green-700
+              background: "#F0FFF4",
+              color: "#2F855A", 
             },
           },
           error: {
             style: {
-              background: "#FFF5F5", // red-50
-              color: "#C53030", // red-700
+              background: "#FFF5F5", 
+              color: "#C53030", 
             },
           },
         }}
       />
       <Routes>
-        {/* Public Routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/report/:id" element={<ReportShare />} />
-
-        {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/*" element={<MainLayout />} />
         </Route>

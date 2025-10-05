@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { CheckCircle, LogOut } from "lucide-react";
 
-// Step component remains unchanged
 const Step = ({ number, title, active, completed }) => (
   <div className="flex items-center">
     <div

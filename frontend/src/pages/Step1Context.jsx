@@ -25,8 +25,6 @@ const erpOptions = [
 const Step1Context = () => {
   const { contextData, setContextData } = useContext(AppContext);
   const navigate = useNavigate();
-
-  // Local state to manage the selected object for the custom select component
   const [selectedCountry, setSelectedCountry] = useState(
     countryOptions.find((o) => o.id === contextData.country) ||
       countryOptions[0]

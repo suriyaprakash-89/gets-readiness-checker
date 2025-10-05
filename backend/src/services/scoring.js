@@ -1,4 +1,4 @@
-const GETS_REQUIRED_FIELD_COUNT = 15; // Based on PRD schema
+const GETS_REQUIRED_FIELD_COUNT = 15; 
 
 export const calculateScores = (
   mappingResult,
@@ -6,17 +6,15 @@ export const calculateScores = (
   postureScore,
   totalRows
 ) => {
-  // Data Score (simple version based on rows parsed) - Assuming all rows parse, this is 100.
+ 
   const dataScore = 100;
 
-  // Coverage Score
   const matchedCount = mappingResult.matched.length;
   const closeMatchCount = mappingResult.closeMatch.length;
   const coverageScore = Math.round(
     ((matchedCount + closeMatchCount * 0.5) / GETS_REQUIRED_FIELD_COUNT) * 100
   );
 
-  // Rules Score
   let totalRules = Object.keys(rulesResult.stats).length;
   let failedRules = 0;
   Object.values(rulesResult.stats).forEach((stat) => {
@@ -29,10 +27,6 @@ export const calculateScores = (
       ? Math.round(((totalRules - failedRules) / totalRules) * 100)
       : 100;
 
-  // Posture Score (from frontend questionnaire)
-  // Passed directly, assumed to be 0-100
-
-  // Overall Weighted Score (as per PRD)
   const overall =
     dataScore * 0.25 +
     coverageScore * 0.35 +
@@ -49,7 +43,7 @@ export const calculateScores = (
 
   return {
     data: dataScore,
-    coverage: Math.min(100, coverageScore), // Cap at 100
+    coverage: Math.min(100, coverageScore), 
     rules: rulesScore,
     posture: postureScore,
     overall: overallScore,

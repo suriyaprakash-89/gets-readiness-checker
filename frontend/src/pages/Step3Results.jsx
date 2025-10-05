@@ -33,13 +33,11 @@ const Step3Results = () => {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    // If user lands here directly without data, redirect them to start over.
     if (!analysisResult) {
       navigate("/");
     }
   }, [analysisResult, navigate]);
 
-  // Render nothing or a loader while redirecting
   if (!analysisResult) {
     return null;
   }

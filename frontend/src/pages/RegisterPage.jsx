@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../supabase";
-import toast from "react-hot-toast"; // Import toast
+import toast from "react-hot-toast";
 import { UserPlus } from "lucide-react";
 
 const RegisterPage = () => {
@@ -22,18 +22,16 @@ const RegisterPage = () => {
     if (error) {
       toast.error(error.message);
     } else {
-      // Check if email confirmation is required from Supabase settings
       if (
         data.user &&
         data.user.identities &&
         data.user.identities.length === 0
       ) {
         toast.success("Registration successful! Please confirm your email.");
-        // Redirect to login after a short delay
+
         setTimeout(() => navigate("/login"), 2000);
       } else {
         toast.success("Registration successful! Please sign in.");
-        // Redirect to login after a short delay
         setTimeout(() => navigate("/login"), 2000);
       }
     }

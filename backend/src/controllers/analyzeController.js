@@ -3,7 +3,6 @@ import { mapSchema } from "../services/schemaMapping.js";
 import { runAllRules } from "../services/rules.js";
 import { calculateScores } from "../services/scoring.js";
 
-// Define the rules list here to be accessible within the controller for report generation
 const RULES = [
   { id: "TOTALS_BALANCE" },
   { id: "LINE_MATH" },
@@ -14,8 +13,6 @@ const RULES = [
 
 export const handleAnalysis = async (req, res) => {
   try {
-    // --- AUTHENTICATION CHECK ---
-    // Extract the JWT from the Authorization header
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res
@@ -23,7 +20,6 @@ export const handleAnalysis = async (req, res) => {
         .json({ error: "Authentication required. No token provided." });
     }
 
-    // Verify the token with Supabase to get the authenticated user
     const {
       data: { user },
       error: userError,
@@ -33,27 +29,22 @@ export const handleAnalysis = async (req, res) => {
         .status(401)
         .json({ error: userError?.message || "Invalid or expired token." });
     }
-    // --- END AUTHENTICATION CHECK ---
 
     const { uploadId, fileData, context } = req.body;
     if (!uploadId || !fileData || !context) {
       return res.status(400).json({ error: "Missing required analysis data." });
     }
 
-    // 1. Schema Mapping
     const mappingResult = mapSchema(fileData);
 
-    // 2. Run Rules, passing the new reverseMap for better alias handling
     const rulesResult = runAllRules(
       fileData,
       mappingResult.fieldMap,
       mappingResult.reverseMap
     );
 
-    // 3. Get Posture Score from the context provided by the frontend
     const postureScore = context.posture || 50;
 
-    // 4. Calculate Scores
     const scores = calculateScores(
       mappingResult,
       rulesResult,
@@ -61,9 +52,8 @@ export const handleAnalysis = async (req, res) => {
       fileData.length
     );
 
-    // 5. Construct the PRD-aligned Report JSON
     const uniqueRuleFindings = rulesResult.findings;
-    // Add 'ok: true' for any rules that had no failing findings to ensure all rules appear in the report
+
     RULES.forEach((rule) => {
       if (!uniqueRuleFindings.some((f) => f.rule === rule.id)) {
         uniqueRuleFindings.push({ rule: rule.id, ok: true });
@@ -71,7 +61,6 @@ export const handleAnalysis = async (req, res) => {
     });
 
     const reportJson = {
-      // The reportId will be overridden by the DB UUID, but we use this as a placeholder
       reportId: `temp_${uploadId}`,
       scores,
       coverage: {
@@ -93,9 +82,8 @@ export const handleAnalysis = async (req, res) => {
       },
     };
 
-    // 6. Save the report to Supabase, linking it to the authenticated user
     const expires_at = new Date();
-    expires_at.setDate(expires_at.getDate() + 7); // Report expires in 7 days as per PRD
+    expires_at.setDate(expires_at.getDate() + 7);
 
     const { data, error } = await supabase
       .from("reports")
@@ -104,7 +92,7 @@ export const handleAnalysis = async (req, res) => {
         report_json: reportJson,
         scores_overall: scores.overall,
         expires_at: expires_at.toISOString(),
-        user_id: user.id, // Link the report to the authenticated user
+        user_id: user.id,
       })
       .select("id")
       .single();
@@ -114,10 +102,8 @@ export const handleAnalysis = async (req, res) => {
       throw new Error(`Supabase error: ${error.message}`);
     }
 
-    // Override the temporary reportId with the permanent one from the database for the response
     reportJson.reportId = data.id;
 
-    // 7. Send the final report back to the client
     res.status(200).json({
       reportId: data.id,
       report: reportJson,

@@ -1,11 +1,10 @@
 import axios from "axios";
-import { supabase } from "./supabase"; // Import supabase client
+import { supabase } from "./supabase"; 
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000",
 });
 
-// Interceptor to add the JWT to every request
 api.interceptors.request.use(
   async (config) => {
     const {

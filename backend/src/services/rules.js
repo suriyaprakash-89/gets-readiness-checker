@@ -1,4 +1,3 @@
-// --- No changes to `get` helper ---
 const get = (obj, path, defaultValue = undefined) => {
   if (typeof path !== "string" || path === "") return defaultValue;
   const travel = (regexp) =>
@@ -13,7 +12,6 @@ const get = (obj, path, defaultValue = undefined) => {
   return result === undefined || result === obj ? defaultValue : result;
 };
 
-// PRD RULE 1: TOTALS_BALANCE
 const validateTotalsBalance = (invoice, map, index) => {
   const totalExclVat = parseFloat(
     get(invoice, map["invoice.total_excl_vat"], 0)
@@ -34,13 +32,11 @@ const validateTotalsBalance = (invoice, map, index) => {
   return null;
 };
 
-// PRD RULE 2: LINE_MATH
 const validateLineMath = (invoice, map, index) => {
   const lines = get(invoice, map.lines);
   if (!lines) return null;
 
   if (Array.isArray(lines)) {
-    // JSON case
     for (const [lineIndex, line] of lines.entries()) {
       const qty = parseFloat(
         get(
@@ -85,7 +81,6 @@ const validateLineMath = (invoice, map, index) => {
       }
     }
   } else {
-    // Flat CSV case
     const qty = parseFloat(get(invoice, map["lines.qty"]));
     const unitPrice = parseFloat(get(invoice, map["lines.unit_price"]));
     const lineTotal = parseFloat(get(invoice, map["lines.line_total"]));
@@ -101,7 +96,6 @@ const validateLineMath = (invoice, map, index) => {
   return null;
 };
 
-// PRD RULE 3: DATE_ISO
 const validateDateISO = (invoice, map, index) => {
   const dateStr = get(invoice, map["invoice.issue_date"]);
   if (!dateStr) return null;
@@ -111,7 +105,6 @@ const validateDateISO = (invoice, map, index) => {
   return null;
 };
 
-// PRD RULE 4: CURRENCY_ALLOWED
 const validateCurrencyAllowed = (invoice, map, index) => {
   const currency = get(invoice, map["invoice.currency"]);
   if (
@@ -123,7 +116,6 @@ const validateCurrencyAllowed = (invoice, map, index) => {
   return null;
 };
 
-// PRD RULE 5: TRN_PRESENT
 const validateTrnPresent = (invoice, map, index) => {
   const sellerTrn = get(invoice, map["seller.trn"]);
   const buyerTrn = get(invoice, map["buyer.trn"]);
@@ -155,7 +147,7 @@ export const runAllRules = (data, fieldMap, reverseMap) => {
       const finding = rule.func(invoice, { ...fieldMap, reverseMap }, index);
       if (finding) {
         rulePassFail[rule.id].failed++;
-        // Add finding only once per rule
+
         if (!findings.some((f) => f.rule === rule.id)) {
           findings.push({
             rule: rule.id,

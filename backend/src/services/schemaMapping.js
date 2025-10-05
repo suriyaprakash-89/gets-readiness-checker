@@ -1,23 +1,21 @@
-// --- PRD ALIGNED: Mock GETS v0.1 Schema ---
 const GETS_SCHEMA = [
-  // Header
   { key: "invoice.id", required: true },
   { key: "invoice.issue_date", required: true },
   { key: "invoice.currency", required: true },
   { key: "invoice.total_excl_vat", required: true },
   { key: "invoice.vat_amount", required: true },
   { key: "invoice.total_incl_vat", required: true },
-  // Seller
+
   { key: "seller.name", required: true },
   { key: "seller.trn", required: true },
   { key: "seller.country", required: false },
   { key: "seller.city", required: false },
-  // Buyer
+
   { key: "buyer.name", required: true },
   { key: "buyer.trn", required: true },
   { key: "buyer.country", required: false },
   { key: "buyer.city", required: false },
-  // Lines
+
   { key: "lines", required: true },
   { key: "lines.sku", required: false },
   { key: "lines.description", required: true },
@@ -28,7 +26,6 @@ const GETS_SCHEMA = [
 
 const REQUIRED_FIELDS = GETS_SCHEMA.filter((f) => f.required).map((f) => f.key);
 
-// --- ALIAS MAP: Maps a flattened, lowercased user key to a GETS key ---
 const ALIAS_MAP = {
   invid: "invoice.id",
   invno: "invoice.id",
@@ -59,8 +56,6 @@ const ALIAS_MAP = {
   lineprice: "lines.line_price",
   linetotal: "lines.line_total",
 };
-
-// Flattens a user's invoice object and normalizes keys for mapping
 const getFlatKeys = (obj, prefix = "") => {
   if (!obj) return [];
   return Object.keys(obj).reduce((acc, key) => {
@@ -87,17 +82,15 @@ export const mapSchema = (data) => {
   }
 
   const userKeys = Array.from(new Set(getFlatKeys(data[0])));
-  const fieldMap = {}; // Maps GETS key -> user key
+  const fieldMap = {};
   const matched = new Set();
   const closeMatch = new Set();
 
-  // Create a reverse map for easier lookup: user key -> GETS key
   const reverseMap = {};
 
   for (const userKey of userKeys) {
     const normalizedUserKey = userKey.toLowerCase().replace(/[\s_.]/g, "");
 
-    // Check for exact match in schema
     if (GETS_SCHEMA.some((s) => s.key === userKey)) {
       fieldMap[userKey] = userKey;
       reverseMap[userKey] = userKey;
@@ -105,7 +98,6 @@ export const mapSchema = (data) => {
       continue;
     }
 
-    // Check for alias match
     const getsKey = ALIAS_MAP[normalizedUserKey];
     if (getsKey) {
       fieldMap[getsKey] = userKey;
@@ -126,6 +118,6 @@ export const mapSchema = (data) => {
     closeMatch: Array.from(closeMatch),
     missing,
     fieldMap,
-    reverseMap, // Pass this to rules engine
+    reverseMap,
   };
 };

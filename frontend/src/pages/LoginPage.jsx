@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../supabase";
-import toast from "react-hot-toast"; // Import toast
+import toast from "react-hot-toast"; 
 import { LogIn } from "lucide-react";
 
 const LoginPage = () => {
@@ -23,7 +23,7 @@ const LoginPage = () => {
       toast.error(error.message);
     } else {
       toast.success("Signed in successfully!");
-      navigate("/"); // Redirect to the main app
+      navigate("/"); 
     }
     setLoading(false);
   };
